@@ -1,4 +1,4 @@
-package com.hexagonal.arquitetura.util;
+package com.hexagonal.arquitetura.application.util;
 
 public enum Status {
 

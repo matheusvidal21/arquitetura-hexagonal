@@ -1,24 +1,20 @@
-package com.hexagonal.arquitetura.product;
+package com.hexagonal.arquitetura.application.product;
 
-import com.hexagonal.arquitetura.exception.PriceException;
-import com.hexagonal.arquitetura.exception.StatusException;
-import com.hexagonal.arquitetura.util.Status;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import org.hibernate.validator.constraints.UUID;
-
+import com.hexagonal.arquitetura.application.exception.PriceException;
+import com.hexagonal.arquitetura.application.util.Status;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Product implements ProductInterface{
+public class Product implements ProductInterface {
 
     @NotBlank
-    @UUID
     private String ID;
 
     @NotBlank
@@ -44,11 +40,11 @@ public class Product implements ProductInterface{
         }
 
         if(status != Status.ENABLED && status != Status.DISABLED){
-            throw new StatusException("The status must be enabled or disabled");
+            return false;
         }
 
         if(price < 0.0){
-            throw new PriceException("The price must be greater or equal zero");
+            return false;
         }
 
         Set<String> errors = validar();
@@ -73,21 +69,21 @@ public class Product implements ProductInterface{
     }
 
     @Override
-    public void enable() {
+    public void enable() throws PriceException {
         if(price > 0.0){
+            status = Status.ENABLED;
+        } else {
             throw new PriceException("The price must be greater than zero to enable the product");
         }
-        status = Status.ENABLED;
     }
 
     @Override
-    public void disable() {
+    public void disable() throws PriceException {
         if(price == 0.0){
+            status = Status.DISABLED;
+        }else {
             throw new PriceException("The price must be zero in order to have the product disabled");
-
         }
-        status = Status.DISABLED;
-
     }
 
     @Override
@@ -108,5 +104,21 @@ public class Product implements ProductInterface{
     @Override
     public Double getPrice() {
         return price;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

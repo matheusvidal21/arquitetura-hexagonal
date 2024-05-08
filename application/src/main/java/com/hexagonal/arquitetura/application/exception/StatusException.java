@@ -1,4 +1,4 @@
-package com.hexagonal.arquitetura.exception;
+package com.hexagonal.arquitetura.application.exception;
 
 public class StatusException extends RuntimeException{
 
