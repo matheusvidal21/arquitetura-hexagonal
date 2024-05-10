@@ -1,8 +1,8 @@
 package com.hexagonal.arquitetura.producer.configuration;
 
 import com.hexagonal.arquitetura.adapters.services.ProductServiceImpl;
-import com.hexagonal.arquitetura.application.repository.ProductRepository;
-import com.hexagonal.arquitetura.application.service.ProductService;
+import com.hexagonal.arquitetura.application.ports.repository.ProductRepository;
+import com.hexagonal.arquitetura.application.ports.service.ProductService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

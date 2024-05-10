@@ -1,4 +1,4 @@
-package com.hexagonal.arquitetura.application.service;
+package com.hexagonal.arquitetura.application.ports.service;
 
 import java.util.List;
 

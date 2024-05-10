@@ -3,8 +3,8 @@ package com.hexagonal.arquitetura.adapters.services;
 import com.hexagonal.arquitetura.application.exception.PriceException;
 import com.hexagonal.arquitetura.application.product.Product;
 import com.hexagonal.arquitetura.application.product.ProductInterface;
-import com.hexagonal.arquitetura.application.repository.ProductRepository;
-import com.hexagonal.arquitetura.application.service.ProductService;
+import com.hexagonal.arquitetura.application.ports.repository.ProductRepository;
+import com.hexagonal.arquitetura.application.ports.service.ProductService;
 
 import java.util.List;
 
@@ -32,9 +32,18 @@ public class ProductServiceImpl implements ProductService {
         product.setName(name);
         product.setPrice(price);
         if(!product.isValid()){
-            return new Product();
+            throw new IllegalArgumentException("Não foi possível criar um produto");
         }
         return repository.save(product);
+    }
+
+    @Override
+    public ProductInterface update(String id, ProductInterface product){
+        ProductInterface productInterface = repository.update(id, product);
+        if(!productInterface.isValid()){
+            throw new IllegalArgumentException("Não foi possível atualizar um produto");
+        }
+        return productInterface;
     }
 
     @Override
@@ -43,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
             product.enable();
             return repository.save(product);
         } catch (PriceException e){
-            return new Product();
+            throw new PriceException("O preço deve ser mais que zero para o produto ser habilitado");
         }
     }
 
@@ -53,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
             product.disable();
             return repository.save(product);
         } catch (PriceException e){
-            return new Product();
+            throw new PriceException("O preço deve ser zero para o produto ser desabilitado");
         }
     }
 }
